@@ -32,10 +32,10 @@ class Button(pygame.sprite.Sprite):
         self.sound_action = self.settings["sound_action"]
         self.button_rect = self.object["rect"]
         self.text = self.object["text"]
-        self.sound = False
 
         # Check ----------------------- #
         self.font_check = False
+        self.sound_check = False
 
         # Surface --------------------- #
             # Inactive
@@ -60,7 +60,7 @@ class Button(pygame.sprite.Sprite):
             self.image = self.active
             if self.sound_active is not None and not self.sound:
                 pygame.mixer.Sound.play(self.sound_active)
-                self.sound = True
+                self.sound_check = True
             if self.game.click[1] and self.action is not None:
                 if self.sound_action is not None:
                     pygame.mixer.Sound.play(self.sound_action)
@@ -70,7 +70,7 @@ class Button(pygame.sprite.Sprite):
                     self.action()
         else:
             self.image = self.inactive
-            self.sound = False
+            self.sound_check = False
 
     def draw(self):
         self.game.gameDisplay.blit(self.image, self)

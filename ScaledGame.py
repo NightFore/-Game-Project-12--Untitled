@@ -107,8 +107,8 @@ class ScaledGame(pygame.Surface):
             self.screen = pygame.display.set_mode(self.game_scaled, RESIZABLE)
             self.resize = False
 
-            # Usable Variables
-            self.factor_w = self.game_scaled[0] / self.get_width()  # Use for interface aspect ratio
+            # Variables that can be used to resize the position on the aspect ratio
+            self.factor_w = self.game_scaled[0] / self.get_width()
             self.factor_h = self.game_scaled[1] / self.get_height()
 
         # Add game to screen with the scaled size and gap required.

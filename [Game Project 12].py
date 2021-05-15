@@ -146,6 +146,13 @@ class Game:
         self.click = [None, False, False, False, False, False]
         for event in self.event:
             self.mouse = pygame.mouse.get_pos()
+
+            # Rescaling mouse position to screen size
+            if self.gameDisplay.factor_w != 1 or self.gameDisplay.factor_h != 1:
+                mouse_w = int(self.mouse[0] / self.gameDisplay.factor_w)
+                mouse_h = int(self.mouse[1] / self.gameDisplay.factor_h)
+                self.mouse = (mouse_w, mouse_h)
+
             if event.type == pygame.QUIT:
                 self.quit_game()
 

@@ -4,52 +4,43 @@ from Settings import *
 from os import path
 vec = pygame.math.Vector2
 
-def init_image(sprite):
+
+
+def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+    # Initialization -------------- #
+    sprite.game = game
+    sprite.groups = sprite.game.all_sprites, group
+    sprite.data = data
+    sprite.item = item
+    sprite.parent = parent
+    sprite.variable = variable
+    sprite.action = action
+    pygame.sprite.Sprite.__init__(sprite, sprite.groups)
+
+    # Dict ------------------------ #
+    sprite.dict = dict
+    sprite.object = sprite.dict[sprite.data][sprite.item]
+    sprite.settings = sprite.dict["type"][sprite.object["type"]]
+
+def init_rect(sprite):
     # Settings
-    sprite._layer = sprite.dict["layer"]
-    sprite.image = sprite.object_dict["image"]
-    sprite.center = sprite.object_dict["center"]
-    sprite.bobbing = sprite.object_dict["bobbing"]
-    sprite.flip = sprite.object_dict["flip"]
-    sprite.impact = sprite.object_dict["impact"]
+    sprite.pos = sprite.object["pos"]
+    sprite.size = sprite.settings["size"]
+    sprite.center = sprite.settings["align"]
+    sprite.surface = pygame.Surface(sprite.size)
+    sprite.rect = sprite.game.align_rect(sprite.surface, sprite.pos[0], sprite.pos[1], "center")
 
-    # Image
-    sprite.table = sprite.object_dict["table"]
-    if sprite.table:
-        sprite.reverse = sprite.object_dict["reverse"]
-        sprite.size = sprite.object_dict["size"]
-        sprite.side = sprite.object_dict["side"]
-        sprite.animation_time = sprite.object_dict["animation_time"]
-        sprite.animation_loop = sprite.object_dict["animation_loop"]
-        sprite.loop = 0
-        sprite.index = 0
-        sprite.current_time = 0
-        sprite.images_side = load_tile_table(path.join(sprite.game.graphics_folder, sprite.image), sprite.size[0], sprite.size[1], sprite.reverse)
-        sprite.images = sprite.images_side[sprite.side]
-        sprite.image = sprite.images[sprite.index]
-    else:
-        sprite.image = load_image(sprite.game.graphics_folder, sprite.image)
-    sprite.rect = sprite.image.get_rect()
+    # Border
+    sprite.border_size = sprite.settings["border_size"]
+    sprite.border_color = sprite.settings["border_color"]
+    sprite.surface_rect = (sprite.border_size[0], sprite.border_size[1], sprite.size[0] - 2*sprite.border_size[0], sprite.size[1] - 2*sprite.border_size[1])
 
-    # Center
-    if sprite.center:
-        sprite.rect.center = sprite.pos
-
-    # Bobbing
-    if sprite.bobbing:
-        sprite.tween = tween.linear
-        sprite.step = 0
-        sprite.dir = 1
-
-    # Flip
-    if sprite.flip:
-        if sprite.table:
-            for side in range(len(sprite.images_side)):
-                for index in range(len(sprite.images_side[side])):
-                    sprite.images_side[side][index] = pygame.transform.flip(sprite.images_side[side][index], True, False)
-                    sprite.image = sprite.images[sprite.index]
-        else:
-            sprite.image = pygame.transform.flip(sprite.image, True, False)
+def init_surface(surface, surface_rect, color, border_color=None):
+    surface = surface.copy()
+    if border_color is not None:
+        surface.fill(border_color)
+    pygame.draw.rect(surface, color, surface_rect)
+    return surface
 
 
 

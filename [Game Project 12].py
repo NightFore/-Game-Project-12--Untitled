@@ -82,6 +82,7 @@ class Game:
         self.music_dict = MUSIC_DICT
         self.font_dict = FONT_DICT
         self.button_dict = BUTTON_DICT
+        self.entity_dict = ENTITY_DICT
 
         # Graphics
         self.background_dict = self.game_dict["background"]
@@ -114,19 +115,24 @@ class Game:
 
     def new(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
-        self.characters = pygame.sprite.Group()
         self.buttons = pygame.sprite.Group()
+        self.entities = pygame.sprite.Group()
 
         self.debug = True
         self.paused = False
 
-        Button(self, self.button_dict, self.buttons, object=("main_menu", "new_game"))
-        Button(self, self.button_dict, self.buttons, object=("main_menu", "load"))
-        Button(self, self.button_dict, self.buttons, object=("main_menu", "options"))
-        Button(self, self.button_dict, self.buttons, object=("main_menu", "exit"))
+        # Prototype ------------------- #
+        Button(self, self.button_dict, self.buttons, data="main_menu", item="new_game")
+        Button(self, self.button_dict, self.buttons, data="main_menu", item="load")
+        Button(self, self.button_dict, self.buttons, data="main_menu", item="options")
+        Button(self, self.button_dict, self.buttons, data="main_menu", item="exit", action=self.quit_game)
         self.update_music(self.music)
 
-    # Game Loop ---------------------- #
+        Entity(self, self.entity_dict, self.entities, data="data", item="item")
+
+
+
+    # Game Loop ----------------------- #
     def run(self):
         self.playing = True
         while self.playing:

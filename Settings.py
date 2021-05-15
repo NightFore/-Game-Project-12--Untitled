@@ -7,7 +7,7 @@ from os import path
 project_title = "Untitled"
 screen_size = WIDTH, HEIGHT = 1280, 720
 FPS = 60
-default_volume = 5
+default_volume = 100
 
 """
     Colors
@@ -32,7 +32,7 @@ DARK_SKY_BLUE = 15, 160, 240
 GAME_DICT = {
     "background": {
         "background_image": None,
-        "background_color": None,
+        "background_color": DARK_SKY_BLUE,
     },
 
     "HUD": {
@@ -59,17 +59,33 @@ BUTTON_DICT = {
     # Type  ------------------- #
     "type": {
         "type_1": {
-            "center": True,
+            "align": "center", "size": (280, 50),
+            "border": True, "border_size": (5, 5), "border_color": BLACK,
             "font": "menu", "font_color": WHITE,
-            "inactive_color": LIGHT_SKY_BLUE, "active_color": DARK_SKY_BLUE, "border_color": BLACK, "border_size": 5,
+            "inactive_color": LIGHT_SKY_BLUE, "active_color": DARK_SKY_BLUE,
             "sound_active": None, "sound_action": None}
     },
 
     # Main Menu --------------- #
     "main_menu": {
-        "new_game":     {"rect": [640, 300, 280, 50], "type": "type_1", "text": "New Game"},
-        "load":         {"rect": [640, 375, 280, 50], "type": "type_1", "text": "Load Game"},
-        "options":      {"rect": [640, 450, 280, 50], "type": "type_1", "text": "Options"},
-        "exit":         {"rect": [640, 525, 280, 50], "type": "type_1", "text": "Exit"}
+        "new_game":     {"type": "type_1", "pos": (640, 300), "text": "New Game"},
+        "load":         {"type": "type_1", "pos": (640, 375), "text": "Load Game"},
+        "options":      {"type": "type_1", "pos": (640, 450), "text": "Options"},
+        "exit":         {"type": "type_1", "pos": (640, 525), "text": "Exit"}
     }
 }
+
+ENTITY_DICT = {
+    "type": {
+        "type_1": {
+            "align": "center", "size": (50, 50),
+            "border": False, "border_size": (0, 0), "border_color": None,
+            "color": RED
+        }
+    },
+
+    "data": {
+        "item": {"type": "type_1", "pos": (150, 125)}
+    }
+}
+

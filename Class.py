@@ -27,10 +27,10 @@ class Button(pygame.sprite.Sprite):
         self.sound_active = self.settings["sound_active"]
         self.sound_action = self.settings["sound_action"]
 
-        # Action ---------------------- #
-        self.action = self.object["action"]
-        if self.action is not None:
-            self.action = eval(self.action)
+        # Arguments Settings ---------- #
+        if self.variable is None:
+            self.variable = self.object["variable"]
+        self.action = eval(self.object["action"])
 
         # Check ----------------------- #
         self.font_check = False

@@ -68,10 +68,10 @@ BUTTON_DICT = {
 
     # Main Menu --------------- #
     "main_menu": {
-        "new_game":     {"type": "type_1", "pos": (640, 300), "text": "New Game", "action": "None"},
-        "load":         {"type": "type_1", "pos": (640, 375), "text": "Load Game", "action": "None"},
-        "options":      {"type": "type_1", "pos": (640, 450), "text": "Options", "action": "None"},
-        "exit":         {"type": "type_1", "pos": (640, 525), "text": "Exit", "action": "self.game.quit_game"}
+        "button_1": {"type": "type_1", "pos": (640, 300), "text": "New Game", "variable": None, "action": "None"},
+        "button_2": {"type": "type_1", "pos": (640, 375), "text": "Load Game", "variable": None, "action": "None"},
+        "button_3": {"type": "type_1", "pos": (640, 450), "text": "Options", "variable": None, "action": "self.kill"},
+        "button_4": {"type": "type_1", "pos": (640, 525), "text": "Exit", "variable": None, "action": "self.game.quit_game"}
     }
 }
 
@@ -84,7 +84,7 @@ ENTITY_DICT = {
         }
     },
 
-    "data": {
+    "main_menu": {
         "item": {"type": "type_1", "pos": (150, 125)}
     }
 }

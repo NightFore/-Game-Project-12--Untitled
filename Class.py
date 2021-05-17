@@ -9,8 +9,8 @@ vec = pygame.math.Vector2
 
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
-        init_sprite(self, game, dict, group, data, item, parent, variable, action)
+    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None):
+        init_sprite(self, game, dict, group, data, item, parent, variable)
         init_rect(self)
 
         # Surface --------------------- #
@@ -26,6 +26,11 @@ class Button(pygame.sprite.Sprite):
         # Sound Settings -------------- #
         self.sound_active = self.settings["sound_active"]
         self.sound_action = self.settings["sound_action"]
+
+        # Action ---------------------- #
+        self.action = self.object["action"]
+        if self.action is not None:
+            self.action = eval(self.action)
 
         # Check ----------------------- #
         self.font_check = False
@@ -60,8 +65,8 @@ class Button(pygame.sprite.Sprite):
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
-        init_sprite(self, game, dict, group, data, item, parent, variable, action)
+    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None):
+        init_sprite(self, game, dict, group, data, item, parent, variable)
         init_rect(self)
         self.inactive_surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
 

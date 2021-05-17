@@ -4,9 +4,7 @@ from Settings import *
 from os import path
 vec = pygame.math.Vector2
 
-
-
-def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=None, variable=None):
     # Initialization -------------- #
     sprite.game = game
     sprite.groups = sprite.game.all_sprites, group
@@ -14,7 +12,6 @@ def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=Non
     sprite.item = item
     sprite.parent = parent
     sprite.variable = variable
-    sprite.action = action
     pygame.sprite.Sprite.__init__(sprite, sprite.groups)
 
     # Dict ------------------------ #

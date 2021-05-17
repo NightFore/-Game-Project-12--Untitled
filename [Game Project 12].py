@@ -8,6 +8,7 @@ from ScaledGame import *
 from Class import *
 from Function import *
 from Settings import *
+from UI import *
 
 vec = pygame.math.Vector2
 
@@ -79,6 +80,7 @@ class Game:
 
         # Dict
         self.game_dict = GAME_DICT
+        self.menu_dict = MENU_DICT
         self.music_dict = MUSIC_DICT
         self.font_dict = FONT_DICT
         self.button_dict = BUTTON_DICT
@@ -88,6 +90,7 @@ class Game:
         self.background_dict = self.game_dict["background"]
         self.background_image = self.background_dict["background_image"]
         self.background_color = self.background_dict["background_color"]
+        self.menu = "main_menu"
 
         # Music
         self.music = self.music_dict["main_menu"]
@@ -120,17 +123,8 @@ class Game:
 
         self.debug = True
         self.paused = False
-
-        # Prototype ------------------- #
-        Button(self, self.button_dict, self.buttons, data="main_menu", item="new_game")
-        Button(self, self.button_dict, self.buttons, data="main_menu", item="load")
-        Button(self, self.button_dict, self.buttons, data="main_menu", item="options")
-        Button(self, self.button_dict, self.buttons, data="main_menu", item="exit", action=self.quit_game)
         self.update_music(self.music)
-
-        Entity(self, self.entity_dict, self.entities, data="data", item="item")
-
-
+        self.update_menu(self.menu)
 
     # Game Loop ----------------------- #
     def run(self):
@@ -203,6 +197,13 @@ class Game:
             background = load_image(self.graphics_folder, background)
         if self.background_image != background:
             self.background_image = background
+
+    def update_menu(self, menu=None):
+        if menu is not None:
+            self.menu = menu
+            self.menu_dict[menu](self, menu)
+        else:
+            self.menu_dict[self.menu](self, self.menu)
 
     def update_music(self, music):
         if music is not None:

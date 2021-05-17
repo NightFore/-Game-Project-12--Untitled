@@ -68,10 +68,10 @@ BUTTON_DICT = {
 
     # Main Menu --------------- #
     "main_menu": {
-        "new_game":     {"type": "type_1", "pos": (640, 300), "text": "New Game"},
-        "load":         {"type": "type_1", "pos": (640, 375), "text": "Load Game"},
-        "options":      {"type": "type_1", "pos": (640, 450), "text": "Options"},
-        "exit":         {"type": "type_1", "pos": (640, 525), "text": "Exit"}
+        "new_game":     {"type": "type_1", "pos": (640, 300), "text": "New Game", "action": "None"},
+        "load":         {"type": "type_1", "pos": (640, 375), "text": "Load Game", "action": "None"},
+        "options":      {"type": "type_1", "pos": (640, 450), "text": "Options", "action": "None"},
+        "exit":         {"type": "type_1", "pos": (640, 525), "text": "Exit", "action": "self.game.quit_game"}
     }
 }
 

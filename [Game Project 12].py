@@ -8,7 +8,7 @@ from ScaledGame import *
 from Class import *
 from Function import *
 from Settings import *
-from UI import *
+from Menu import *
 
 vec = pygame.math.Vector2
 
@@ -83,6 +83,7 @@ class Game:
         self.menu_dict = MENU_DICT
         self.music_dict = MUSIC_DICT
         self.font_dict = FONT_DICT
+        self.ui_dict = UI_DICT
         self.button_dict = BUTTON_DICT
         self.entity_dict = ENTITY_DICT
 
@@ -118,6 +119,7 @@ class Game:
 
     def new(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.uis = pygame.sprite.Group()
         self.buttons = pygame.sprite.Group()
         self.entities = pygame.sprite.Group()
 

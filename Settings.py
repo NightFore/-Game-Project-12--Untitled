@@ -55,6 +55,31 @@ FONT_DICT = {
     "menu": {"ttf": "LiberationSerif-Regular.ttf", "size": 40}
 }
 
+UI_DICT = {
+    # Type  ------------------- #
+    "type": {
+        "type_1": {
+            "align": "nw", "size": (500, 680),
+            "border": True, "border_size": (5, 5), "border_color": BLACK,
+            "font": "menu", "font_color": WHITE,
+            "color": LIGHT_SKY_BLUE,
+            "sound_active": None, "sound_action": None},
+        "type_2": {
+            "align": "nw", "size": (710, 680),
+            "border": True, "border_size": (5, 5), "border_color": BLACK,
+            "font": "menu", "font_color": WHITE,
+            "color": LIGHT_SKY_BLUE,
+            "sound_active": None, "sound_action": None},
+    },
+
+    # Menu -------------------- #
+    "main_menu": {},
+    "tutorial_menu": {
+        "ui_1": {"type": "type_1", "pos": (25, 20), "text": None, "variable": None, "action": "None"},
+        "ui_2": {"type": "type_2", "pos": (550, 20), "text": None, "variable": None, "action": "None"},
+    },
+}
+
 BUTTON_DICT = {
     # Type  ------------------- #
     "type": {
@@ -63,16 +88,26 @@ BUTTON_DICT = {
             "border": True, "border_size": (5, 5), "border_color": BLACK,
             "font": "menu", "font_color": WHITE,
             "inactive_color": LIGHT_SKY_BLUE, "active_color": DARK_SKY_BLUE,
-            "sound_active": None, "sound_action": None}
+            "sound_active": None, "sound_action": None},
+        "type_2": {
+            "align": "center", "size": (100, 70),
+            "border": True, "border_size": (5, 5), "border_color": BLACK,
+            "font": "menu", "font_color": WHITE,
+            "inactive_color": LIGHT_SKY_BLUE, "active_color": DARK_SKY_BLUE,
+            "sound_active": None, "sound_action": None},
     },
 
-    # Main Menu --------------- #
+    # Menu -------------------- #
     "main_menu": {
-        "button_1": {"type": "type_1", "pos": (640, 300), "text": "New Game", "variable": None, "action": "None"},
+        "button_1": {"type": "type_1", "pos": (640, 300), "text": "New Game", "variable": "tutorial_menu", "action": "self.game.update_menu"},
         "button_2": {"type": "type_1", "pos": (640, 375), "text": "Load Game", "variable": None, "action": "None"},
         "button_3": {"type": "type_1", "pos": (640, 450), "text": "Options", "variable": None, "action": "self.kill"},
-        "button_4": {"type": "type_1", "pos": (640, 525), "text": "Exit", "variable": None, "action": "self.game.quit_game"}
-    }
+        "button_4": {"type": "type_1", "pos": (640, 525), "text": "Exit", "variable": None, "action": "self.game.quit_game"},
+    },
+    "tutorial_menu": {
+        "button_1": {"type": "type_2", "pos": (625, 645), "text": "←", "variable": "main_menu", "action": "self.game.update_menu"},
+        "button_2": {"type": "type_2", "pos": (1185, 645), "text": "→", "variable": None, "action": "None"},
+    },
 }
 
 ENTITY_DICT = {

@@ -25,7 +25,7 @@ def init_rect(sprite):
     sprite.size = sprite.settings["size"]
     sprite.center = sprite.settings["align"]
     sprite.surface = pygame.Surface(sprite.size)
-    sprite.rect = sprite.game.align_rect(sprite.surface, sprite.pos[0], sprite.pos[1], "center")
+    sprite.rect = sprite.game.align_rect(sprite.surface, sprite.pos[0], sprite.pos[1], sprite.center)
 
     # Border
     sprite.border_size = sprite.settings["border_size"]

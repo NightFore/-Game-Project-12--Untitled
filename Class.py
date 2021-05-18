@@ -6,7 +6,32 @@ from Function import *
 vec = pygame.math.Vector2
 
 
+class UI(pygame.sprite.Sprite):
+    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None):
+        init_sprite(self, game, dict, group, data, item, parent, variable)
+        init_rect(self)
+        self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"], border_color=self.border_color)
 
+        # Font Settings --------------- #
+        self.text = self.object["text"]
+        self.text_pos = self.rect[0] + self.rect[2] / 2, self.rect[1] + self.rect[3] / 2
+        self.font = self.game.font_dict[self.settings["font"]]
+        self.font_color = self.settings["font_color"]
+
+        # Check ----------------------- #
+        self.font_check = False
+
+    def draw(self):
+        self.game.gameDisplay.blit(self.surface, self.rect)
+        if self.text is not None:
+            if self.font is not None:
+                self.game.draw_text(self.text, self.font, self.font_color, self.text_pos, "center")
+            elif not self.font_check:
+                self.font_check = True
+                print("Font not initialized, text: %s" % self.text)
+
+    def update(self):
+        pass
 
 class Button(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None):
@@ -38,11 +63,12 @@ class Button(pygame.sprite.Sprite):
 
     def draw(self):
         self.game.gameDisplay.blit(self.surface, self.rect)
-        if self.text is not None and self.font is not None:
-            self.game.draw_text(self.text, self.font, self.font_color, self.text_pos, "center")
-        elif not self.font_check:
-            self.font_check = True
-            print("Font not initialized, text: %s" % self.text)
+        if self.text is not None:
+            if self.font is not None:
+                self.game.draw_text(self.text, self.font, self.font_color, self.text_pos, "center")
+            elif not self.font_check:
+                self.font_check = True
+                print("Font not initialized, text: %s" % self.text)
 
     def update(self):
         if self.rect.collidepoint(self.game.mouse):

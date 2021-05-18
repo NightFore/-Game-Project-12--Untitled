@@ -38,6 +38,14 @@ class Button(pygame.sprite.Sprite):
         init_sprite(self, game, dict, group, data, item, parent, variable)
         init_rect(self)
 
+        # Arguments Settings ---------- #
+        if "variable" in self.object and self.variable is None:
+            self.variable = self.object["variable"]
+        if "action" in self.object:
+            self.action = eval(self.object["action"])
+        else:
+            self.action = None
+
         # Surface --------------------- #
         self.inactive_surface = init_surface(self.surface, self.surface_rect, self.settings["inactive_color"], border_color=self.border_color)
         self.active_surface = init_surface(self.surface, self.surface_rect, self.settings["active_color"], border_color=self.border_color)
@@ -51,11 +59,6 @@ class Button(pygame.sprite.Sprite):
         # Sound Settings -------------- #
         self.sound_active = self.settings["sound_active"]
         self.sound_action = self.settings["sound_action"]
-
-        # Arguments Settings ---------- #
-        if self.variable is None:
-            self.variable = self.object["variable"]
-        self.action = eval(self.object["action"])
 
         # Check ----------------------- #
         self.font_check = False
@@ -96,9 +99,26 @@ class Entity(pygame.sprite.Sprite):
         init_rect(self)
         self.inactive_surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
 
+        # Arguments Settings ---------- #
+        if "variable" in self.object and self.variable is None:
+            self.variable = self.object["variable"]
+        if "action" in self.object:
+            self.action = eval(self.object["action"])
+        else:
+            self.action = None
+
     def draw(self):
         self.game.gameDisplay.blit(self.inactive_surface, self.rect)
 
     def update(self):
+        self.update_player()
+
+    def update_move(self):
         pass
-        # self.game.update_sprite(self)
+
+    def update_player(self):
+        if self.variable == "player":
+            for event in self.game.event:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_d:
+                        print("d")

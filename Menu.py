@@ -47,10 +47,18 @@ def tutorial_menu(game, menu):
     clear_menu(game)
     init_menu(game, menu)
 
+def level_menu(game, menu):
+    clear_menu(game)
+    init_menu(game, menu)
+
+def pause_menu(game, menu):
+    game.paused = not game.paused
 
 
 
 MENU_DICT = {
     "main_menu": main_menu,
     "tutorial_menu": tutorial_menu,
+    "level_menu": level_menu,
+    "pause_menu": pause_menu,
 }

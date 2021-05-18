@@ -4,6 +4,9 @@ from Settings import *
 from os import path
 vec = pygame.math.Vector2
 
+"""
+    Sprite initialization functions
+"""
 def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=None, variable=None):
     # Initialization -------------- #
     sprite.game = game
@@ -42,7 +45,7 @@ def init_surface(surface, surface_rect, color, border_color=None):
 
 
 """
-    Sprite's update functions
+    Sprite update functions
 """
 def update_time_dependent(sprite):
     if sprite.table:
@@ -75,7 +78,9 @@ def update_bobbing(sprite):
 
 
 
-# Gameplay / Interface
+"""
+    Gameplay dependent functions
+"""
 def update_move(sprite):
     if sprite.vel == (0, 0):
         if not sprite.game.debug_mode:
@@ -93,7 +98,11 @@ def update_move(sprite):
         sprite.vel = vec(0, 0)
         del sprite.range[0]
 
-# Miscellaneous
+
+
+"""
+    Miscellaneous
+"""
 def load_file(path, image=False):
     file = []
     for file_name in os.listdir(path):

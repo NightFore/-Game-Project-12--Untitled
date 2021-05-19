@@ -4,13 +4,23 @@ from os import path
 from Class import *
 from Function import *
 
-def init_menu(game, menu, ui=True, button=True, entity=True):
+def init_menu(game, menu, ui=True, button=True, entity=True, wall=True):
     if ui:
-        update_ui(game, menu)
+        if menu in game.ui_dict:
+            for ui in game.ui_dict[menu]:
+                UI(game, game.ui_dict, game.uis, data=menu, item=ui)
     if button:
-        update_button(game, menu)
+        if menu in game.button_dict:
+            for button in game.button_dict[menu]:
+                Button(game, game.button_dict, game.buttons, data=menu, item=button)
     if entity:
-        update_entity(game, menu)
+        if menu in game.entity_dict:
+            for entity in game.entity_dict[menu]:
+                Entity(game, game.entity_dict, game.entities, data=menu, item=entity)
+    if wall:
+        if menu in game.wall_dict:
+            for wall in game.wall_dict[menu]:
+                Wall(game, game.wall_dict, game.walls, data=menu, item=wall)
 
 def clear_menu(game, ui=True, button=True, entity=True):
     if ui:
@@ -22,22 +32,6 @@ def clear_menu(game, ui=True, button=True, entity=True):
     if entity:
         for entity in game.entities:
             entity.kill()
-
-def update_ui(game, menu):
-    if menu in game.ui_dict:
-        for ui in game.ui_dict[menu]:
-            UI(game, game.ui_dict, game.uis, data=menu, item=ui)
-
-def update_button(game, menu):
-    if menu in game.button_dict:
-        for button in game.button_dict[menu]:
-            Button(game, game.button_dict, game.buttons, data=menu, item=button)
-
-def update_entity(game, menu):
-    if menu in game.entity_dict:
-        for entity in game.entity_dict[menu]:
-            Entity(game, game.entity_dict, game.entities, data=menu, item=entity)
-
 
 def main_menu(game, menu):
     clear_menu(game)

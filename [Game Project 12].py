@@ -86,6 +86,7 @@ class Game:
         self.ui_dict = UI_DICT
         self.button_dict = BUTTON_DICT
         self.entity_dict = ENTITY_DICT
+        self.wall_dict = WALL_DICT
 
         # Graphics
         self.background_dict = self.game_dict["background"]
@@ -122,6 +123,7 @@ class Game:
         self.uis = pygame.sprite.Group()
         self.buttons = pygame.sprite.Group()
         self.entities = pygame.sprite.Group()
+        self.walls = pygame.sprite.Group()
 
         self.debug = True
         self.paused = False

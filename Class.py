@@ -7,8 +7,8 @@ vec = pygame.math.Vector2
 
 
 class UI(pygame.sprite.Sprite):
-    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None):
-        init_sprite(self, game, dict, group, data, item, parent, variable)
+    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        init_sprite(self, game, dict, group, data, item, parent, variable, action)
         init_rect(self)
         self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"], border_color=self.border_color)
 
@@ -34,17 +34,9 @@ class UI(pygame.sprite.Sprite):
         pass
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None):
-        init_sprite(self, game, dict, group, data, item, parent, variable)
+    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        init_sprite(self, game, dict, group, data, item, parent, variable, action)
         init_rect(self)
-
-        # Arguments Settings ---------- #
-        if "variable" in self.object and self.variable is None:
-            self.variable = self.object["variable"]
-        if "action" in self.object:
-            self.action = eval(self.object["action"])
-        else:
-            self.action = None
 
         # Surface --------------------- #
         self.inactive_surface = init_surface(self.surface, self.surface_rect, self.settings["inactive_color"], border_color=self.border_color)
@@ -94,31 +86,54 @@ class Button(pygame.sprite.Sprite):
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None):
-        init_sprite(self, game, dict, group, data, item, parent, variable)
+    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        init_sprite(self, game, dict, group, data, item, parent, variable, action)
         init_rect(self)
         self.inactive_surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
-
-        # Arguments Settings ---------- #
-        if "variable" in self.object and self.variable is None:
-            self.variable = self.object["variable"]
-        if "action" in self.object:
-            self.action = eval(self.object["action"])
-        else:
-            self.action = None
+        self.init_move()
 
     def draw(self):
         self.game.gameDisplay.blit(self.inactive_surface, self.rect)
 
     def update(self):
-        self.update_player()
+        self.update_move()
+
+    def init_move(self):
+        self.pos = vec(self.object["pos"][:])
+        self.pos_dt = vec(0, 0)
+        self.vel = vec(0, 0)
+        self.move_speed = vec(self.settings["move_speed"])
 
     def update_move(self):
-        pass
-
-    def update_player(self):
         if self.variable == "player":
-            for event in self.game.event:
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_d:
-                        print("d")
+            keys = pygame.key.get_pressed()
+            move = [0, 0]
+            if keys[pygame.K_UP] or keys[pygame.K_w]:
+                move[1] = -1
+            if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                move[1] = 1
+            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                move[0] = -1
+            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                move[0] = 1
+            self.vel = vec(self.move_speed.elementwise() * move)
+        elif self.vel == (0, 0):
+            self.vel = self.move_speed
+        self.pos += self.vel * self.dt
+        self.pos_dt += self.vel.x * self.dt, self.vel.y * self.dt
+        self.rect = self.game.align_rect(self.surface, int(self.pos[0]), int(self.pos[1]), self.center)
+
+
+
+
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        init_sprite(self, game, dict, group, data, item, parent, variable, action)
+        init_rect(self)
+        self.inactive_surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
+
+    def draw(self):
+        self.game.gameDisplay.blit(self.inactive_surface, self.rect)
+
+    def update(self):
+        pass

@@ -7,20 +7,28 @@ vec = pygame.math.Vector2
 """
     Sprite initialization functions
 """
-def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=None, variable=None):
+def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
     # Initialization -------------- #
     sprite.game = game
+    sprite.dt = game.dt
     sprite.groups = sprite.game.all_sprites, group
     sprite.data = data
     sprite.item = item
     sprite.parent = parent
     sprite.variable = variable
+    sprite.action = action
     pygame.sprite.Sprite.__init__(sprite, sprite.groups)
 
     # Dict ------------------------ #
     sprite.dict = dict
     sprite.object = sprite.dict[sprite.data][sprite.item]
     sprite.settings = sprite.dict["type"][sprite.object["type"]]
+
+    # Arguments Settings ---------- #
+    if "variable" in sprite.object and sprite.variable is None:
+        sprite.variable = sprite.object["variable"]
+    if "action" in sprite.object and sprite.action is None:
+        sprite.action = eval(sprite.object["action"])
 
 def init_rect(sprite):
     # Settings

@@ -111,17 +111,17 @@ BUTTON_DICT = {
 
     # Menu -------------------- #
     "main_menu": {
-        "new_game": {"type": "type_1", "pos": (640, 300), "text": "New Game", "variable": "tutorial_menu", "action": "self.game.update_menu"},
+        "new_game": {"type": "type_1", "pos": (640, 300), "text": "New Game", "variable": "tutorial_menu", "action": "sprite.game.update_menu"},
         "load_game": {"type": "type_1", "pos": (640, 375), "text": "Load Game"},
-        "options": {"type": "type_1", "pos": (640, 450), "text": "Options", "action": "self.kill"},
-        "exit": {"type": "type_1", "pos": (640, 525), "text": "Exit", "action": "self.game.quit_game"},
+        "options": {"type": "type_1", "pos": (640, 450), "text": "Options", "action": "sprite.kill"},
+        "exit": {"type": "type_1", "pos": (640, 525), "text": "Exit", "action": "sprite.game.quit_game"},
     },
     "tutorial_menu": {
-        "next": {"type": "type_2", "pos": (625, 645), "text": "←", "variable": "main_menu", "action": "self.game.update_menu"},
-        "return": {"type": "type_2", "pos": (1185, 645), "text": "→", "variable": "level_menu", "action": "self.game.update_menu"},
+        "next": {"type": "type_2", "pos": (625, 645), "text": "←", "variable": "main_menu", "action": "sprite.game.update_menu"},
+        "return": {"type": "type_2", "pos": (1185, 645), "text": "→", "variable": "level_menu", "action": "sprite.game.update_menu"},
     },
     "level_menu": {
-        "pause": {"type": "type_3", "pos": (1260, 20), "text": "Pause", "variable": "pause_menu", "action": "self.game.update_menu"},
+        "pause": {"type": "type_3", "pos": (1260, 20), "text": "Pause", "variable": "pause_menu", "action": "sprite.game.update_menu"},
     },
 
 }
@@ -131,21 +131,43 @@ ENTITY_DICT = {
         "type_player": {
             "align": "center", "size": (50, 50),
             "border": False, "border_size": (0, 0), "border_color": None,
-            "color": BLUE
+            "color": BLUE,
+            "move_speed": (500, 500)
         },
         "type_1": {
             "align": "center", "size": (50, 50),
             "border": False, "border_size": (0, 0), "border_color": None,
-            "color": RED
+            "color": RED,
+            "move_speed": (100, 100)
         },
     },
 
-    "main_menu": {
-        "item": {"type": "type_1", "pos": (150, 125)}
-    },
-
     "level_menu": {
-        "player": {"type": "type_player", "pos": (640, 360), "variable": "player"}
+        "player": {"type": "type_player", "pos": (640, 360), "variable": "player"},
+        "entity": {"type": "type_1", "pos": (640, 50)},
     },
 }
 
+WALL_DICT = {
+    "type": {
+        "wall_horizontal": {
+            "align": "center", "size": (600, 60),
+            "border": False, "border_size": (0, 0), "border_color": None,
+            "color": RED,
+            "move_speed": (0, 0)
+        },
+        "wall_vertical": {
+            "align": "center", "size": (340, 600),
+            "border": False, "border_size": (0, 0), "border_color": None,
+            "color": RED,
+            "move_speed": (0, 0)
+        },
+    },
+
+    "level_menu": {
+        "wall_n": {"type": "wall_horizontal", "pos": (640, 30)},
+        "wall_s": {"type": "wall_horizontal", "pos": (640, 690)},
+        "wall_w": {"type": "wall_vertical", "pos": (170, 360)},
+        "wall_e": {"type": "wall_vertical", "pos": (1110, 360)},
+    },
+}

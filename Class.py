@@ -8,8 +8,10 @@ vec = pygame.math.Vector2
 
 class UI(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        # Initialization -------------- #
         init_sprite(self, game, dict, group, data, item, parent, variable, action)
-        init_rect(self)
+
+        # Surface --------------------- #
         self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"], border_color=self.border_color)
 
         # Font Settings --------------- #
@@ -33,10 +35,12 @@ class UI(pygame.sprite.Sprite):
     def update(self):
         pass
 
+
+
 class Button(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        # Initialization -------------- #
         init_sprite(self, game, dict, group, data, item, parent, variable, action)
-        init_rect(self)
 
         # Surface --------------------- #
         self.inactive_surface = init_surface(self.surface, self.surface_rect, self.settings["inactive_color"], border_color=self.border_color)
@@ -84,25 +88,21 @@ class Button(pygame.sprite.Sprite):
 
 
 
-
 class Entity(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        # Initialization -------------- #
         init_sprite(self, game, dict, group, data, item, parent, variable, action)
-        init_rect(self)
-        self.inactive_surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
         self.init_move()
 
-    def draw(self):
-        self.game.gameDisplay.blit(self.inactive_surface, self.rect)
-
-    def update(self):
-        self.update_move()
+        # Surface --------------------- #
+        self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
 
     def init_move(self):
         self.pos = vec(self.object["pos"][:])
         self.pos_dt = vec(0, 0)
         self.vel = vec(0, 0)
         self.move_speed = vec(self.settings["move_speed"])
+        self.hit_rect = self.rect
 
     def update_move(self):
         if self.variable == "player":
@@ -121,19 +121,53 @@ class Entity(pygame.sprite.Sprite):
             self.vel = self.move_speed
         self.pos += self.vel * self.dt
         self.pos_dt += self.vel.x * self.dt, self.vel.y * self.dt
+        collide_with_walls(self, self.game.walls)
         self.rect = self.game.align_rect(self.surface, int(self.pos[0]), int(self.pos[1]), self.center)
 
+    def draw(self):
+        self.game.gameDisplay.blit(self.surface, self.rect)
+
+    def update(self):
+        self.update_move()
 
 
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        # Initialization -------------- #
         init_sprite(self, game, dict, group, data, item, parent, variable, action)
-        init_rect(self)
-        self.inactive_surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
+
+        # Surface --------------------- #
+        self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
 
     def draw(self):
-        self.game.gameDisplay.blit(self.inactive_surface, self.rect)
+        self.game.gameDisplay.blit(self.surface, self.rect)
 
     def update(self):
         pass
+
+def collide_with_walls(sprite, group):
+    def collide_hit_rect(one, two):
+        return one.hit_rect.colliderect(two.rect)
+
+    # WIP - Center only
+    sprite.hit_rect.centerx = sprite.pos.x
+    hits = pygame.sprite.spritecollide(sprite, group, False, collide_hit_rect)
+    if hits:
+        if hits[0].rect.centerx > sprite.hit_rect.centerx:
+            sprite.pos.x = hits[0].rect.left - sprite.hit_rect.width / 2
+        if hits[0].rect.centerx < sprite.hit_rect.centerx:
+            sprite.pos.x = hits[0].rect.right + sprite.hit_rect.width / 2
+        sprite.vel.x = 0
+        sprite.hit_rect.centerx = sprite.pos.x
+
+    sprite.hit_rect.centery = sprite.pos.y
+    hits = pygame.sprite.spritecollide(sprite, group, False, collide_hit_rect)
+    if hits:
+        if hits[0].rect.centery > sprite.hit_rect.centery:
+            sprite.pos.y = hits[0].rect.top - sprite.hit_rect.height / 2
+        if hits[0].rect.centery < sprite.hit_rect.centery:
+            sprite.pos.y = hits[0].rect.bottom + sprite.hit_rect.height / 2
+        sprite.vel.y = 0
+        sprite.hit_rect.centery = sprite.pos.y
+    sprite.rect.center = sprite.hit_rect.center

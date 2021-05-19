@@ -30,7 +30,6 @@ def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=Non
     if "action" in sprite.object and sprite.action is None:
         sprite.action = eval(sprite.object["action"])
 
-def init_rect(sprite):
     # Settings
     sprite.pos = sprite.object["pos"]
     sprite.size = sprite.settings["size"]

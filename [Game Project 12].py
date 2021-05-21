@@ -122,6 +122,7 @@ class Game:
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.uis = pygame.sprite.Group()
         self.buttons = pygame.sprite.Group()
+        self.player = pygame.sprite.Group()
         self.entities = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
 

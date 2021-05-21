@@ -128,7 +128,7 @@ BUTTON_DICT = {
 
 ENTITY_DICT = {
     "type": {
-        "type_player": {
+        "player": {
             "align": "center", "size": (50, 50),
             "border": False, "border_size": (0, 0), "border_color": None,
             "color": BLUE,
@@ -143,7 +143,7 @@ ENTITY_DICT = {
     },
 
     "level_menu": {
-        "player": {"type": "type_player", "pos": (640, 360), "variable": "player"},
+        "player": {"type": "player", "pos": (640, 360), "variable": "player"},
         "entity": {"type": "type_1", "pos": (640, 50)},
     },
 }

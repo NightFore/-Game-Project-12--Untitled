@@ -105,30 +105,65 @@ class Entity(pygame.sprite.Sprite):
         self.hit_rect = self.rect
 
     def update_move(self):
-        if self.variable == "player":
-            keys = pygame.key.get_pressed()
-            move = [0, 0]
-            if keys[pygame.K_UP] or keys[pygame.K_w]:
-                move[1] = -1
-            if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-                move[1] = 1
-            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-                move[0] = -1
-            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-                move[0] = 1
-            self.vel = vec(self.move_speed.elementwise() * move)
-        elif self.vel == (0, 0):
-            self.vel = self.move_speed
         self.pos += self.vel * self.dt
         self.pos_dt += self.vel.x * self.dt, self.vel.y * self.dt
-        collide_with_walls(self, self.game.walls)
         self.rect = self.game.align_rect(self.surface, int(self.pos[0]), int(self.pos[1]), self.center)
 
     def draw(self):
         self.game.gameDisplay.blit(self.surface, self.rect)
 
     def update(self):
+        if self.vel == (0, 0):
+            self.vel = self.move_speed
         self.update_move()
+
+
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        # Initialization -------------- #
+        init_sprite(self, game, dict, group, data, item, parent, variable, action)
+        self.init_move()
+
+        # Surface --------------------- #
+        self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
+
+    def init_move(self):
+        self.pos = vec(self.object["pos"][:])
+        self.pos_dt = vec(0, 0)
+        self.vel = vec(0, 0)
+        self.move_speed = vec(self.settings["move_speed"])
+        self.hit_rect = self.rect
+
+    def update_move(self):
+        self.pos += self.vel * self.dt
+        self.pos_dt += self.vel.x * self.dt, self.vel.y * self.dt
+        self.rect = self.game.align_rect(self.surface, int(self.pos[0]), int(self.pos[1]), self.center)
+
+    def get_keys(self):
+        keys = pygame.key.get_pressed()
+        move = [0, 0]
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
+            move[1] = -1
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            move[1] = 1
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            move[0] = -1
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            move[0] = 1
+        self.vel = vec(self.move_speed.elementwise() * move)
+
+    def draw(self):
+        self.game.gameDisplay.blit(self.surface, self.rect)
+
+    def update(self):
+        self.get_keys()
+        self.update_move()
+
+        collide_with_walls(self, self.game.walls)
+        hits = pygame.sprite.spritecollide(self, self.game.entities, False, collide_hit_rect)
+        if hits:
+            print("ok")
 
 
 
@@ -146,10 +181,10 @@ class Wall(pygame.sprite.Sprite):
     def update(self):
         pass
 
-def collide_with_walls(sprite, group):
-    def collide_hit_rect(one, two):
-        return one.hit_rect.colliderect(two.rect)
+def collide_hit_rect(one, two):
+    return one.hit_rect.colliderect(two.rect)
 
+def collide_with_walls(sprite, group):
     # WIP - Center only
     sprite.hit_rect.centerx = sprite.pos.x
     hits = pygame.sprite.spritecollide(sprite, group, False, collide_hit_rect)

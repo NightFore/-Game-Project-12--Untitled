@@ -16,7 +16,10 @@ def init_menu(game, menu, ui=True, button=True, entity=True, wall=True):
     if entity:
         if menu in game.entity_dict:
             for entity in game.entity_dict[menu]:
-                Entity(game, game.entity_dict, game.entities, data=menu, item=entity)
+                if game.entity_dict[menu][entity]["type"] == "player":
+                    Player(game, game.entity_dict, game.player, data=menu, item=entity)
+                else:
+                    Entity(game, game.entity_dict, game.entities, data=menu, item=entity)
     if wall:
         if menu in game.wall_dict:
             for wall in game.wall_dict[menu]:

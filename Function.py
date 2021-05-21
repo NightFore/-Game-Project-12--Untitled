@@ -7,7 +7,7 @@ vec = pygame.math.Vector2
 """
     Sprite initialization functions
 """
-def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None, move=False):
     # Initialization -------------- #
     sprite.game = game
     sprite.dt = game.dt
@@ -42,6 +42,13 @@ def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=Non
     sprite.border_color = sprite.settings["border_color"]
     sprite.surface_rect = (sprite.border_size[0], sprite.border_size[1], sprite.size[0] - 2*sprite.border_size[0], sprite.size[1] - 2*sprite.border_size[1])
 
+    if move:
+        sprite.pos = vec(sprite.object["pos"][:])
+        sprite.pos_dt = vec(0, 0)
+        sprite.vel = vec(0, 0)
+        sprite.move_speed = vec(sprite.settings["move_speed"])
+        sprite.hit_rect = sprite.rect
+
 def init_surface(surface, surface_rect, color, border_color=None):
     surface = surface.copy()
     if border_color is not None:
@@ -52,8 +59,44 @@ def init_surface(surface, surface_rect, color, border_color=None):
 
 
 """
+    Gameplay functions
+"""
+def collide_with_walls(sprite, group):
+    # WIP - Center only
+    sprite.hit_rect.centerx = sprite.pos.x
+    hits = pygame.sprite.spritecollide(sprite, group, False, collide_hit_rect)
+    if hits:
+        if hits[0].rect.centerx > sprite.hit_rect.centerx:
+            sprite.pos.x = hits[0].rect.left - sprite.hit_rect.width / 2
+        if hits[0].rect.centerx < sprite.hit_rect.centerx:
+            sprite.pos.x = hits[0].rect.right + sprite.hit_rect.width / 2
+        sprite.vel.x = 0
+        sprite.hit_rect.centerx = sprite.pos.x
+
+    sprite.hit_rect.centery = sprite.pos.y
+    hits = pygame.sprite.spritecollide(sprite, group, False, collide_hit_rect)
+    if hits:
+        if hits[0].rect.centery > sprite.hit_rect.centery:
+            sprite.pos.y = hits[0].rect.top - sprite.hit_rect.height / 2
+        if hits[0].rect.centery < sprite.hit_rect.centery:
+            sprite.pos.y = hits[0].rect.bottom + sprite.hit_rect.height / 2
+        sprite.vel.y = 0
+        sprite.hit_rect.centery = sprite.pos.y
+    sprite.rect.center = sprite.hit_rect.center
+
+def collide_hit_rect(one, two):
+    return one.hit_rect.colliderect(two.rect)
+
+
+
+"""
     Sprite update functions
 """
+def update_move(sprite):
+    sprite.pos += sprite.vel * sprite.dt
+    sprite.pos_dt += sprite.vel.x * sprite.dt, sprite.vel.y * sprite.dt
+    sprite.rect = sprite.game.align_rect(sprite.surface, int(sprite.pos[0]), int(sprite.pos[1]), sprite.center)
+
 def update_time_dependent(sprite):
     if sprite.table:
         sprite.current_time += sprite.dt
@@ -67,12 +110,10 @@ def update_time_dependent(sprite):
             sprite.kill()
         sprite.image = pygame.transform.rotate(sprite.image, 0)
 
-
 def update_center(sprite):
     if sprite.center:
         sprite.rect = sprite.image.get_rect()
         sprite.rect.center = sprite.pos
-
 
 def update_bobbing(sprite):
     if sprite.bobbing:
@@ -82,28 +123,6 @@ def update_bobbing(sprite):
         if sprite.step > BOB_RANGE:
             sprite.step = 0
             sprite.dir *= -1
-
-
-
-"""
-    Gameplay dependent functions
-"""
-def update_move(sprite):
-    if sprite.vel == (0, 0):
-        if not sprite.game.debug_mode:
-            sprite.vel = vec(sprite.move_speed.elementwise() * sprite.range[0])
-        else:
-            sprite.vel = vec(sprite.debug_move_speed.elementwise() * sprite.range[0])
-    if abs(sprite.pos_dt[0] + sprite.vel.x * sprite.dt) <= sprite.grid_dt[0] and abs(
-            sprite.pos_dt[1] + sprite.vel.y * sprite.dt) <= sprite.grid_dt[1]:
-        sprite.pos += sprite.vel * sprite.dt
-        sprite.pos_dt += sprite.vel.x * sprite.dt, sprite.vel.y * sprite.dt
-    else:
-        sprite.grid_pos += sprite.range[0]
-        sprite.pos = vec(sprite.pos - sprite.pos_dt + sprite.grid_dt.elementwise() * sprite.range[0])
-        sprite.pos_dt = vec(0, 0)
-        sprite.vel = vec(0, 0)
-        del sprite.range[0]
 
 
 

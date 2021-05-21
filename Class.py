@@ -5,38 +5,6 @@ from Settings import *
 from Function import *
 vec = pygame.math.Vector2
 
-
-class UI(pygame.sprite.Sprite):
-    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
-        # Initialization -------------- #
-        init_sprite(self, game, dict, group, data, item, parent, variable, action)
-
-        # Surface --------------------- #
-        self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"], border_color=self.border_color)
-
-        # Font Settings --------------- #
-        self.text = self.object["text"]
-        self.text_pos = self.rect[0] + self.rect[2] / 2, self.rect[1] + self.rect[3] / 2
-        self.font = self.game.font_dict[self.settings["font"]]
-        self.font_color = self.settings["font_color"]
-
-        # Check ----------------------- #
-        self.font_check = False
-
-    def draw(self):
-        self.game.gameDisplay.blit(self.surface, self.rect)
-        if self.text is not None:
-            if self.font is not None:
-                self.game.draw_text(self.text, self.font, self.font_color, self.text_pos, "center")
-            elif not self.font_check:
-                self.font_check = True
-                print("Font not initialized, text: %s" % self.text)
-
-    def update(self):
-        pass
-
-
-
 class Button(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
         # Initialization -------------- #
@@ -86,44 +54,59 @@ class Button(pygame.sprite.Sprite):
             self.surface = self.inactive_surface
             self.sound_check = False
 
-
-
-class Entity(pygame.sprite.Sprite):
+class UI(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
         # Initialization -------------- #
         init_sprite(self, game, dict, group, data, item, parent, variable, action)
-        self.init_move()
 
         # Surface --------------------- #
-        self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
+        self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"], border_color=self.border_color)
 
-    def init_move(self):
-        self.pos = vec(self.object["pos"][:])
-        self.pos_dt = vec(0, 0)
-        self.vel = vec(0, 0)
-        self.move_speed = vec(self.settings["move_speed"])
-        self.hit_rect = self.rect
+        # Font Settings --------------- #
+        self.text = self.object["text"]
+        self.text_pos = self.rect[0] + self.rect[2] / 2, self.rect[1] + self.rect[3] / 2
+        self.font = self.game.font_dict[self.settings["font"]]
+        self.font_color = self.settings["font_color"]
 
-    def update_move(self):
-        self.pos += self.vel * self.dt
-        self.pos_dt += self.vel.x * self.dt, self.vel.y * self.dt
-        self.rect = self.game.align_rect(self.surface, int(self.pos[0]), int(self.pos[1]), self.center)
+        # Check ----------------------- #
+        self.font_check = False
 
     def draw(self):
         self.game.gameDisplay.blit(self.surface, self.rect)
+        if self.text is not None:
+            if self.font is not None:
+                self.game.draw_text(self.text, self.font, self.font_color, self.text_pos, "center")
+            elif not self.font_check:
+                self.font_check = True
+                print("Font not initialized, text: %s" % self.text)
 
     def update(self):
-        if self.vel == (0, 0):
-            self.vel = self.move_speed
-        self.update_move()
+        pass
+
+class Level(pygame.sprite.Sprite):
+    def __init__(self, game, group):
+        # Initialization -------------- #
+        self.game = game
+        self.groups = self.game.all_sprites, group
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.level = 1
+        self.last_entity = pygame.time.get_ticks()
+
+    def draw(self):
+        pass
+
+    def update(self):
+        if pygame.time.get_ticks() - self.last_entity >= 300:
+            Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity")
+            self.last_entity = pygame.time.get_ticks()
 
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
         # Initialization -------------- #
-        init_sprite(self, game, dict, group, data, item, parent, variable, action)
-        self.init_move()
+        init_sprite(self, game, dict, group, data, item, parent, variable, action, move=True)
 
         # Surface --------------------- #
         self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
@@ -158,14 +141,28 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.get_keys()
-        self.update_move()
+        update_move(self)
 
         collide_with_walls(self, self.game.walls)
         hits = pygame.sprite.spritecollide(self, self.game.entities, False, collide_hit_rect)
         if hits:
-            print("ok")
+            pass
 
+class Entity(pygame.sprite.Sprite):
+    def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
+        # Initialization -------------- #
+        init_sprite(self, game, dict, group, data, item, parent, variable, action, move=True)
 
+        # Surface --------------------- #
+        self.surface = init_surface(self.surface, self.surface_rect, self.settings["color"])
+
+    def draw(self):
+        self.game.gameDisplay.blit(self.surface, self.rect)
+
+    def update(self):
+        if self.vel == (0, 0):
+            self.vel = self.move_speed
+        update_move(self)
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
@@ -180,29 +177,3 @@ class Wall(pygame.sprite.Sprite):
 
     def update(self):
         pass
-
-def collide_hit_rect(one, two):
-    return one.hit_rect.colliderect(two.rect)
-
-def collide_with_walls(sprite, group):
-    # WIP - Center only
-    sprite.hit_rect.centerx = sprite.pos.x
-    hits = pygame.sprite.spritecollide(sprite, group, False, collide_hit_rect)
-    if hits:
-        if hits[0].rect.centerx > sprite.hit_rect.centerx:
-            sprite.pos.x = hits[0].rect.left - sprite.hit_rect.width / 2
-        if hits[0].rect.centerx < sprite.hit_rect.centerx:
-            sprite.pos.x = hits[0].rect.right + sprite.hit_rect.width / 2
-        sprite.vel.x = 0
-        sprite.hit_rect.centerx = sprite.pos.x
-
-    sprite.hit_rect.centery = sprite.pos.y
-    hits = pygame.sprite.spritecollide(sprite, group, False, collide_hit_rect)
-    if hits:
-        if hits[0].rect.centery > sprite.hit_rect.centery:
-            sprite.pos.y = hits[0].rect.top - sprite.hit_rect.height / 2
-        if hits[0].rect.centery < sprite.hit_rect.centery:
-            sprite.pos.y = hits[0].rect.bottom + sprite.hit_rect.height / 2
-        sprite.vel.y = 0
-        sprite.hit_rect.centery = sprite.pos.y
-    sprite.rect.center = sprite.hit_rect.center

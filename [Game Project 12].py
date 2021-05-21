@@ -54,7 +54,7 @@ class Game:
             text = str(text)
         text_surface = font.render(text, True, color)
         text_rect = self.align_rect(text_surface, int(pos[0]), int(pos[1]), align)
-        if self.debug:
+        if self.debug_mode:
             pygame.draw.rect(self.gameDisplay, CYAN, text_rect, 1)
         self.gameDisplay.blit(text_surface, text_rect)
 
@@ -122,11 +122,12 @@ class Game:
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.uis = pygame.sprite.Group()
         self.buttons = pygame.sprite.Group()
+        self.levels = pygame.sprite.Group()
         self.player = pygame.sprite.Group()
         self.entities = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
 
-        self.debug = True
+        self.debug_mode = True
         self.paused = False
         self.update_music(self.music)
         self.update_menu(self.menu)
@@ -170,7 +171,7 @@ class Game:
                 if event.key == pygame.K_p:
                     self.paused = not self.paused
                 if event.key == pygame.K_h:
-                    self.debug = not self.debug
+                    self.debug_mode = not self.debug_mode
 
     def update(self):
         self.all_sprites.update()
@@ -181,9 +182,6 @@ class Game:
             self.gameDisplay.blit(self.background_image, (0, 0))
         if self.background_color is not None:
             self.gameDisplay.fill(self.background_color)
-
-        # Interface ------------------- #
-        # if self.game_status == "":
 
         # Sprites --------------------- #
         for sprite in self.all_sprites:

@@ -47,6 +47,7 @@ def tutorial_menu(game, menu):
 def level_menu(game, menu):
     clear_menu(game)
     init_menu(game, menu)
+    Level(game, game.levels)
 
 def pause_menu(game, menu):
     game.paused = not game.paused

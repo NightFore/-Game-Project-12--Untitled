@@ -10,7 +10,6 @@ vec = pygame.math.Vector2
 def init_sprite(sprite, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None, move=False):
     # Initialization -------------- #
     sprite.game = game
-    sprite.dt = game.dt
     sprite.groups = sprite.game.all_sprites, group
     sprite.data = data
     sprite.item = item
@@ -93,8 +92,15 @@ def collide_hit_rect(one, two):
     Sprite update functions
 """
 def update_move(sprite):
-    sprite.pos += sprite.vel * sprite.dt
-    sprite.pos_dt += sprite.vel.x * sprite.dt, sprite.vel.y * sprite.dt
+    sprite.pos += sprite.vel * sprite.game.dt
+    sprite.pos_dt += sprite.vel.x * sprite.game.dt, sprite.vel.y * sprite.game.dt
+    update_rect(sprite)
+
+def update_rect(sprite, x=None, y=None):
+    if x is not None:
+        sprite.pos[0] = x
+    if y is not None:
+        sprite.pos[1] = y
     sprite.rect = sprite.game.align_rect(sprite.surface, int(sprite.pos[0]), int(sprite.pos[1]), sprite.center)
 
 def update_time_dependent(sprite):

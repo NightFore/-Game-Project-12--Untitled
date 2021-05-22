@@ -138,7 +138,7 @@ ENTITY_DICT = {
             "align": "center", "size": (50, 50),
             "border": False, "border_size": (0, 0), "border_color": None,
             "color": RED,
-            "move_speed": (100, 100)
+            "move_speed": (0, 100)
         },
     },
 
@@ -153,13 +153,13 @@ WALL_DICT = {
         "wall_horizontal": {
             "align": "center", "size": (600, 60),
             "border": False, "border_size": (0, 0), "border_color": None,
-            "color": RED,
+            "color": GREEN,
             "move_speed": (0, 0)
         },
         "wall_vertical": {
             "align": "center", "size": (340, 600),
             "border": False, "border_size": (0, 0), "border_color": None,
-            "color": RED,
+            "color": GREEN,
             "move_speed": (0, 0)
         },
     },

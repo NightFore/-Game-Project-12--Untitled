@@ -1,4 +1,5 @@
 import pygame
+import random
 from pygame.locals import *
 from os import path
 
@@ -20,6 +21,7 @@ class Game:
         pygame.mixer.pre_init(44100, -16, 2, 2048)
         pygame.mixer.init()
         pygame.init()
+        random.seed()
         pygame.key.set_repeat(50, 150)
         pygame.mixer.music.set_volume(default_volume/100)
         self.gameDisplay = ScaledGame(project_title, screen_size, FPS)

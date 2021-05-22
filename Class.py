@@ -83,24 +83,6 @@ class UI(pygame.sprite.Sprite):
     def update(self):
         pass
 
-class Level(pygame.sprite.Sprite):
-    def __init__(self, game, group):
-        # Initialization -------------- #
-        self.game = game
-        self.groups = self.game.all_sprites, group
-        pygame.sprite.Sprite.__init__(self, self.groups)
-
-        self.level = 1
-        self.last_entity = pygame.time.get_ticks()
-
-    def draw(self):
-        pass
-
-    def update(self):
-        if pygame.time.get_ticks() - self.last_entity >= 300:
-            Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity")
-            self.last_entity = pygame.time.get_ticks()
-
 
 
 class Player(pygame.sprite.Sprite):
@@ -164,6 +146,9 @@ class Entity(pygame.sprite.Sprite):
             self.vel = self.move_speed
         update_move(self)
 
+        if self.pos_dt[0] + self.pos_dt[1] > WIDTH + HEIGHT:
+            self.kill()
+
 class Wall(pygame.sprite.Sprite):
     def __init__(self, game, dict, group=None, data=None, item=None, parent=None, variable=None, action=None):
         # Initialization -------------- #
@@ -177,3 +162,24 @@ class Wall(pygame.sprite.Sprite):
 
     def update(self):
         pass
+
+
+
+class Level(pygame.sprite.Sprite):
+    def __init__(self, game, group):
+        # Initialization -------------- #
+        self.game = game
+        self.groups = self.game.all_sprites, group
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.level = 1
+        self.last_entity = pygame.time.get_ticks()
+
+    def draw(self):
+        pass
+
+    def update(self):
+        if pygame.time.get_ticks() - self.last_entity >= 1000:
+            entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity")
+            update_rect(entity, 340 + random.randrange(25, 575))
+            self.last_entity = pygame.time.get_ticks()

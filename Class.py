@@ -172,14 +172,22 @@ class Level(pygame.sprite.Sprite):
         self.groups = self.game.all_sprites, group
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.level = 1
+        self.level = 2
         self.last_entity = pygame.time.get_ticks()
 
     def draw(self):
         pass
 
     def update(self):
-        if pygame.time.get_ticks() - self.last_entity >= 1000:
-            entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity")
-            update_rect(entity, 340 + random.randrange(25, 575))
-            self.last_entity = pygame.time.get_ticks()
+        if self.game.level_mode:
+            if self.level == 1:
+                if pygame.time.get_ticks() - self.last_entity >= 1500:
+                    entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_1")
+                    update_rect(entity, 340 + random.randrange(25, 575))
+                    self.last_entity = pygame.time.get_ticks()
+
+            if self.level == 2:
+                if pygame.time.get_ticks() - self.last_entity >= 1000:
+                    entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_2")
+                    update_rect(entity, 340 + random.randrange(25, 575))
+                    self.last_entity = pygame.time.get_ticks()

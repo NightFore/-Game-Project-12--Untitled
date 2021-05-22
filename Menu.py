@@ -46,8 +46,9 @@ def tutorial_menu(game, menu):
 
 def level_menu(game, menu):
     clear_menu(game)
-    init_menu(game, menu)
-    Level(game, game.levels)
+    init_menu(game, menu, entity=False)
+    Player(game, game.entity_dict, game.player, data=menu, item="player")
+    game.level_mode = True
 
 def pause_menu(game, menu):
     game.paused = not game.paused

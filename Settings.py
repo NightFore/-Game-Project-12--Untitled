@@ -138,13 +138,20 @@ ENTITY_DICT = {
             "align": "center", "size": (50, 50),
             "border": False, "border_size": (0, 0), "border_color": None,
             "color": RED,
-            "move_speed": (0, 100)
+            "move_speed": (0, 150)
+        },
+        "type_2": {
+            "align": "center", "size": (50, 50),
+            "border": False, "border_size": (0, 0), "border_color": None,
+            "color": RED,
+            "move_speed": (0, 200)
         },
     },
 
     "level_menu": {
         "player": {"type": "player", "pos": (640, 360), "variable": "player"},
-        "entity": {"type": "type_1", "pos": (640, 50)},
+        "entity_1": {"type": "type_1", "pos": (0, 0)},
+        "entity_2": {"type": "type_2", "pos": (0, 0)},
     },
 }
 

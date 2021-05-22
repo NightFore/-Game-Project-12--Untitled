@@ -129,6 +129,8 @@ class Game:
         self.entities = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
 
+        self.level = Level(self, self.levels)
+        self.level_mode = False
         self.debug_mode = True
         self.paused = False
         self.update_music(self.music)

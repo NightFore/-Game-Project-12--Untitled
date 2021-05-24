@@ -146,7 +146,7 @@ class Entity(pygame.sprite.Sprite):
             self.vel = self.move_speed
         update_move(self)
 
-        if self.pos_dt[0] + self.pos_dt[1] > WIDTH + HEIGHT:
+        if abs(self.pos_dt[0]) > WIDTH + self.size[0] or abs(self.pos_dt[1]) > HEIGHT + self.size[1]:
             self.kill()
 
 class Wall(pygame.sprite.Sprite):
@@ -165,12 +165,14 @@ class Wall(pygame.sprite.Sprite):
 
 
 LEVEL_DICT = {
-    "difficulty": {
-      "offset": [340, 0],
+    "easy": {
+        "offset": [340, 60],
     },
-    "level_1": {
-        "respawn_time": 1500,
-        "type": ["type_1_vn"]
+    "normal": {
+        "offset": [415, 135],
+    },
+    "hard": {
+        "offset": [465, 185],
     },
 }
 
@@ -178,8 +180,10 @@ class Level:
     def __init__(self, game):
         # Initialization -------------- #
         self.game = game
-        self.difficulty = "normal"
-        self.level = 3
+        self.difficulty = 1
+        self.level = 1
+        self.entity_count = 0
+        self.entity_max = 1
         self.last_entity = pygame.time.get_ticks()
 
     def init(self, menu):
@@ -188,23 +192,31 @@ class Level:
 
     def update(self):
         if self.game.level_mode:
-            if self.level == 1:
-                if pygame.time.get_ticks() - self.last_entity >= 1500:
-                    for i in range(self.level):
-                        entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_1")
-                        update_rect(entity, 340 + random.randrange(25, 575))
-                    self.last_entity = pygame.time.get_ticks()
+            if self.entity_count < self.entity_max:
+                if self.level == 1:
+                    if pygame.time.get_ticks() - self.last_entity >= 1500:
+                        for i in range(self.level):
+                            entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_1")
+                            update_rect(entity, 340 + random.randrange(25, 575))
+                        self.entity_count += 1
+                        self.last_entity = pygame.time.get_ticks()
 
-            if self.level == 2:
-                if pygame.time.get_ticks() - self.last_entity >= 1000:
-                    for i in range(self.level):
-                        entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_2")
-                        update_rect(entity, 415 + random.randrange(25, 425))
-                    self.last_entity = pygame.time.get_ticks()
+                if self.level == 2:
+                    if pygame.time.get_ticks() - self.last_entity >= 1000:
+                        for i in range(self.level):
+                            entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_2")
+                            update_rect(entity, 415 + random.randrange(25, 425))
+                        self.entity_count += 1
+                        self.last_entity = pygame.time.get_ticks()
 
-            if self.level == 3:
-                if pygame.time.get_ticks() - self.last_entity >= 750:
-                    for i in range(self.level):
-                        entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_2")
-                        update_rect(entity, 465 + random.randrange(25, 350))
-                    self.last_entity = pygame.time.get_ticks()
+                if self.level >= 3:
+                    if pygame.time.get_ticks() - self.last_entity >= 750:
+                        for i in range(self.level):
+                            entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_2")
+                            update_rect(entity, 465 + random.randrange(25, 350))
+                        self.entity_count += 1
+                        self.last_entity = pygame.time.get_ticks()
+            elif len(self.game.entities.sprites()) == 0:
+                self.level += 1
+                self.entity_count = 0
+                self.entity_max += 1

@@ -164,30 +164,47 @@ class Wall(pygame.sprite.Sprite):
         pass
 
 
+LEVEL_DICT = {
+    "difficulty": {
+      "offset": [340, 0],
+    },
+    "level_1": {
+        "respawn_time": 1500,
+        "type": ["type_1_vn"]
+    },
+}
 
-class Level(pygame.sprite.Sprite):
-    def __init__(self, game, group):
+class Level:
+    def __init__(self, game):
         # Initialization -------------- #
         self.game = game
-        self.groups = self.game.all_sprites, group
-        pygame.sprite.Sprite.__init__(self, self.groups)
-
-        self.level = 2
+        self.difficulty = "normal"
+        self.level = 3
         self.last_entity = pygame.time.get_ticks()
 
-    def draw(self):
-        pass
+    def init(self, menu):
+        self.game.level_mode = True
+        Player(self.game, self.game.entity_dict, self.game.player, data=menu, item="player")
 
     def update(self):
         if self.game.level_mode:
             if self.level == 1:
                 if pygame.time.get_ticks() - self.last_entity >= 1500:
-                    entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_1")
-                    update_rect(entity, 340 + random.randrange(25, 575))
+                    for i in range(self.level):
+                        entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_1")
+                        update_rect(entity, 340 + random.randrange(25, 575))
                     self.last_entity = pygame.time.get_ticks()
 
             if self.level == 2:
                 if pygame.time.get_ticks() - self.last_entity >= 1000:
-                    entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_2")
-                    update_rect(entity, 340 + random.randrange(25, 575))
+                    for i in range(self.level):
+                        entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_2")
+                        update_rect(entity, 415 + random.randrange(25, 425))
+                    self.last_entity = pygame.time.get_ticks()
+
+            if self.level == 3:
+                if pygame.time.get_ticks() - self.last_entity >= 750:
+                    for i in range(self.level):
+                        entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_2")
+                        update_rect(entity, 465 + random.randrange(25, 350))
                     self.last_entity = pygame.time.get_ticks()

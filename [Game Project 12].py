@@ -124,12 +124,11 @@ class Game:
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.uis = pygame.sprite.Group()
         self.buttons = pygame.sprite.Group()
-        self.levels = pygame.sprite.Group()
         self.player = pygame.sprite.Group()
         self.entities = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
 
-        self.level = Level(self, self.levels)
+        self.level = Level(self)
         self.level_mode = False
         self.debug_mode = True
         self.paused = False
@@ -179,6 +178,7 @@ class Game:
 
     def update(self):
         self.all_sprites.update()
+        self.level.update()
 
     def draw(self):
         # Background ------------------ #

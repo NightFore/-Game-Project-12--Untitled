@@ -17,6 +17,8 @@ WHITE = 255, 255, 255
 
 RED = 255, 0, 0
 GREEN = 0, 255, 0
+GREEN_2 = 0, 200, 0
+GREEN_3 = 0, 145, 0
 BLUE = 0, 0, 255
 
 YELLOW = 255, 255, 0
@@ -132,7 +134,7 @@ ENTITY_DICT = {
             "align": "center", "size": (50, 50),
             "border": False, "border_size": (0, 0), "border_color": None,
             "color": BLUE,
-            "move_speed": (500, 500)
+            "move_speed": (750, 750)
         },
         "type_1": {
             "align": "center", "size": (50, 50),
@@ -157,24 +159,50 @@ ENTITY_DICT = {
 
 WALL_DICT = {
     "type": {
-        "wall_horizontal": {
-            "align": "center", "size": (600, 60),
+        "wall_1_horizontal": {
+            "align": "nw", "size": (600, 60),
             "border": False, "border_size": (0, 0), "border_color": None,
             "color": GREEN,
-            "move_speed": (0, 0)
         },
-        "wall_vertical": {
-            "align": "center", "size": (340, 600),
+        "wall_2_horizontal": {
+            "align": "nw", "size": (600, 75),
+            "border": False, "border_size": (0, 0), "border_color": None,
+            "color": GREEN_2,
+        },
+        "wall_3_horizontal": {
+            "align": "nw", "size": (450, 50),
+            "border": False, "border_size": (0, 0), "border_color": None,
+            "color": GREEN_3,
+        },
+        "wall_1_vertical": {
+            "align": "nw", "size": (340, 600),
             "border": False, "border_size": (0, 0), "border_color": None,
             "color": GREEN,
-            "move_speed": (0, 0)
+        },
+        "wall_2_vertical": {
+            "align": "nw", "size": (75, 600),
+            "border": False, "border_size": (0, 0), "border_color": None,
+            "color": GREEN_2,
+        },
+        "wall_3_vertical": {
+            "align": "nw", "size": (50, 450),
+            "border": False, "border_size": (0, 0), "border_color": None,
+            "color": GREEN_3,
         },
     },
 
     "level_menu": {
-        "wall_n": {"type": "wall_horizontal", "pos": (640, 30)},
-        "wall_s": {"type": "wall_horizontal", "pos": (640, 690)},
-        "wall_w": {"type": "wall_vertical", "pos": (170, 360)},
-        "wall_e": {"type": "wall_vertical", "pos": (1110, 360)},
+        "wall_1_n": {"difficulty": 1, "type": "wall_1_horizontal", "pos": (340, 0)},
+        "wall_1_s": {"difficulty": 1, "type": "wall_1_horizontal", "pos": (340, 660)},
+        "wall_1_w": {"difficulty": 1, "type": "wall_1_vertical", "pos": (0, 60)},
+        "wall_1_e": {"difficulty": 1, "type": "wall_1_vertical", "pos": (940, 60)},
+        "wall_2_n": {"difficulty": 2, "type": "wall_2_horizontal", "pos": (340, 60)},
+        "wall_2_s": {"difficulty": 2, "type": "wall_2_horizontal", "pos": (340, 585)},
+        "wall_2_w": {"difficulty": 2, "type": "wall_2_vertical", "pos": (340, 60)},
+        "wall_2_e": {"difficulty": 2, "type": "wall_2_vertical", "pos": (865, 60)},
+        "wall_3_n": {"difficulty": 3, "type": "wall_3_horizontal", "pos": (415, 135)},
+        "wall_3_s": {"difficulty": 3, "type": "wall_3_horizontal", "pos": (415, 535)},
+        "wall_3_w": {"difficulty": 3, "type": "wall_3_vertical", "pos": (415, 135)},
+        "wall_3_e": {"difficulty": 3, "type": "wall_3_vertical", "pos": (815, 135)},
     },
 }

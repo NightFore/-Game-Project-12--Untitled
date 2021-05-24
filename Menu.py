@@ -4,7 +4,9 @@ from os import path
 from Class import *
 from Function import *
 
-def init_menu(game, menu, ui=True, button=True, entity=True, wall=True):
+def init_menu(game, menu, clear=True, ui=True, button=True, entity=True, wall=True):
+    if clear:
+        clear_menu(game)
     if ui:
         if menu in game.ui_dict:
             for ui in game.ui_dict[menu]:
@@ -25,30 +27,19 @@ def init_menu(game, menu, ui=True, button=True, entity=True, wall=True):
             for wall in game.wall_dict[menu]:
                 Wall(game, game.wall_dict, game.walls, data=menu, item=wall)
 
-def clear_menu(game, ui=True, button=True, entity=True):
-    if ui:
-        for ui in game.uis:
-            ui.kill()
-    if button:
-        for button in game.buttons:
-            button.kill()
-    if entity:
-        for entity in game.entities:
-            entity.kill()
+def clear_menu(game):
+    for sprite in game.all_sprites:
+        sprite.kill()
 
 def main_menu(game, menu):
-    clear_menu(game)
     init_menu(game, menu)
 
 def tutorial_menu(game, menu):
-    clear_menu(game)
     init_menu(game, menu)
 
 def level_menu(game, menu):
-    clear_menu(game)
     init_menu(game, menu, entity=False)
-    Player(game, game.entity_dict, game.player, data=menu, item="player")
-    game.level_mode = True
+    game.level.init(menu)
 
 def pause_menu(game, menu):
     game.paused = not game.paused

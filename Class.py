@@ -213,7 +213,7 @@ class Level:
                     if pygame.time.get_ticks() - self.last_entity >= 750:
                         for i in range(self.level):
                             entity = Entity(self.game, self.game.entity_dict, self.game.entities, data="level_menu", item="entity_2")
-                            update_rect(entity, 465 + random.randrange(25, 350))
+                            update_rect(entity, 465 + random.randrange(25, 325))
                         self.entity_count += 1
                         self.last_entity = pygame.time.get_ticks()
             elif len(self.game.entities.sprites()) == 0:
